@@ -60,7 +60,7 @@ const updateTask = async (id: string, postpone: string) => {
 
 const completeTask = async (id: string) => {
 	return makeToDoistRequest(
-		"https://api.todoist.com/rest/v2/tasks/" + id,
+		"https://api.todoist.com/rest/v2/tasks/" + id + "/close",
 		"POST"
 	);
 };
