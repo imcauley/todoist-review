@@ -18,19 +18,21 @@ const DEFAULT_SETTINGS: MyPluginSettings = {
 
 let apiKey = "";
 
-const createRequest = async () => {
+const makeToDoistRequest = async (
+	url: string,
+	method: string,
+	body?: string
+) => {
 	const headers: Headers = new Headers();
 	headers.set("Content-Type", "application/json");
 	headers.set("Accept", "application/json");
 	headers.set("Authorization", "Bearer " + apiKey);
 
-	const request: RequestInfo = new Request(
-		"https://api.todoist.com/rest/v2/tasks?filter=overdue",
-		{
-			method: "GET",
-			headers: headers,
-		}
-	);
+	const request: RequestInfo = new Request(url, {
+		method: method,
+		headers: headers,
+		body: body,
+	});
 
 	return fetch(request)
 		.then((res) => res.json())
@@ -39,28 +41,28 @@ const createRequest = async () => {
 		});
 };
 
-const updateTask = async (id: string, postpone: string) => {
-	const headers: Headers = new Headers();
-	headers.set("Content-Type", "application/json");
-	headers.set("Accept", "application/json");
-	headers.set("Authorization", "Bearer " + apiKey);
-
-	const request: RequestInfo = new Request(
-		"https://api.todoist.com/rest/v2/tasks/" + id,
-		{
-			method: "POST",
-			headers: headers,
-			body: JSON.stringify({
-				due_string: postpone,
-			}),
-		}
+const createRequest = async () => {
+	return makeToDoistRequest(
+		"https://api.todoist.com/rest/v2/tasks?filter=overdue",
+		"GET"
 	);
+};
 
-	return fetch(request)
-		.then((res) => res.json())
-		.then((res) => {
-			return res;
-		});
+const updateTask = async (id: string, postpone: string) => {
+	return makeToDoistRequest(
+		"https://api.todoist.com/rest/v2/tasks/" + id + "/close",
+		"POST",
+		JSON.stringify({
+			due_string: postpone,
+		})
+	);
+};
+
+const completeTask = async (id: string, postpone: string) => {
+	return makeToDoistRequest(
+		"https://api.todoist.com/rest/v2/tasks/" + id,
+		"POST"
+	);
 };
 
 const changeButtonColor = (buttonID: string, id: string) => {
