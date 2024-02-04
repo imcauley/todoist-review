@@ -144,8 +144,15 @@ const codeProcessor = async (
 	ctx: MarkdownPostProcessorContext
 ) => {
 	const main = document.createElement("p");
-	const data = await createRequest();
-	data.map((d: any): any => main.appendChild(convertTaskToHTML(d)));
+	const data: [any] = await createRequest();
+
+	if (data.length < 1) {
+		const text = document.createElement("div");
+		text.textContent = "All caught up 😄";
+		main.appendChild(text);
+	} else {
+		data.map((d: any): any => main.appendChild(convertTaskToHTML(d)));
+	}
 
 	el.appendChild(main);
 	return;
