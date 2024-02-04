@@ -1,4 +1,4 @@
-# Obsidian Sample Plugin
+# Todoist Review Obsidian Plugin
 
 This is a plugin to review and triage overdue tasks from Todoist..
 
