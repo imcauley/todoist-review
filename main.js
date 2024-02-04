@@ -12,24 +12,28 @@ var __export = (target, all) => {
     __defProp(target, name, { get: all[name], enumerable: true });
 };
 var __copyProps = (to, from, except, desc) => {
-  if (from && typeof from === "object" || typeof from === "function") {
+  if ((from && typeof from === "object") || typeof from === "function") {
     for (let key of __getOwnPropNames(from))
       if (!__hasOwnProp.call(to, key) && key !== except)
-        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+        __defProp(to, key, {
+          get: () => from[key],
+          enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable,
+        });
   }
   return to;
 };
-var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+var __toCommonJS = (mod) =>
+  __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
 // main.ts
 var main_exports = {};
 __export(main_exports, {
-  default: () => MyPlugin
+  default: () => MyPlugin,
 });
 module.exports = __toCommonJS(main_exports);
 var import_obsidian = require("obsidian");
 var DEFAULT_SETTINGS = {
-  mySetting: "apiKey"
+  mySetting: "apiKey",
 };
 var apiKey = "";
 var makeToDoistRequest = async (url, method, body) => {
@@ -40,11 +44,13 @@ var makeToDoistRequest = async (url, method, body) => {
   const request = new Request(url, {
     method,
     headers,
-    body
+    body,
   });
-  return fetch(request).then((res) => res.json()).then((res) => {
-    return res;
-  });
+  return fetch(request)
+    .then((res) => res.json())
+    .then((res) => {
+      return res;
+    });
 };
 var createRequest = async () => {
   return makeToDoistRequest(
@@ -57,7 +63,7 @@ var updateTask = async (id, postpone) => {
     "https://api.todoist.com/rest/v2/tasks/" + id + "/close",
     "POST",
     JSON.stringify({
-      due_string: postpone
+      due_string: postpone,
     })
   );
 };
@@ -144,20 +150,12 @@ var MyPlugin = class extends import_obsidian.Plugin {
   async onload() {
     await this.loadSettings();
     apiKey = this.settings.mySetting;
-    this.registerMarkdownCodeBlockProcessor(
-      "todoist-review",
-      codeProcessor
-    );
+    this.registerMarkdownCodeBlockProcessor("todoist-review", codeProcessor);
     this.addSettingTab(new SampleSettingTab(this.app, this));
   }
-  onunload() {
-  }
+  onunload() {}
   async loadSettings() {
-    this.settings = Object.assign(
-      {},
-      DEFAULT_SETTINGS,
-      await this.loadData()
-    );
+    this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
   }
   async saveSettings() {
     await this.saveData(this.settings);
@@ -171,11 +169,17 @@ var SampleSettingTab = class extends import_obsidian.PluginSettingTab {
   display() {
     const { containerEl } = this;
     containerEl.empty();
-    new import_obsidian.Setting(containerEl).setName("Todoist API Key").setDesc("").addText(
-      (text) => text.setPlaceholder("Enter your secret").setValue(this.plugin.settings.mySetting).onChange(async (value) => {
-        this.plugin.settings.mySetting = value;
-        await this.plugin.saveSettings();
-      })
-    );
+    new import_obsidian.Setting(containerEl)
+      .setName("Todoist API Key")
+      .setDesc("")
+      .addText((text) =>
+        text
+          .setPlaceholder("Enter your secret")
+          .setValue(this.plugin.settings.mySetting)
+          .onChange(async (value) => {
+            this.plugin.settings.mySetting = value;
+            await this.plugin.saveSettings();
+          })
+      );
   }
 };
