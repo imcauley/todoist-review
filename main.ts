@@ -58,7 +58,7 @@ const updateTask = async (id: string, postpone: string) => {
 	);
 };
 
-const completeTask = async (id: string, postpone: string) => {
+const completeTask = async (id: string) => {
 	return makeToDoistRequest(
 		"https://api.todoist.com/rest/v2/tasks/" + id,
 		"POST"
@@ -79,6 +79,13 @@ const changeButtonColor = (buttonID: string, id: string) => {
 	});
 
 	button.style.backgroundColor = accent;
+};
+
+const completeButton = (buttonID: string, id: string) => {
+	return () => {
+		changeButtonColor(buttonID, id);
+		completeTask(id);
+	};
 };
 
 const buttonClicker = (buttonID: string, id: string, postpone: string) => {
@@ -122,7 +129,7 @@ const convertTaskToHTML = (data: any): any => {
 	complete.textContent = "Complete";
 	const completeID = data["id"] + "-complete-button";
 	complete.id = completeID;
-	complete.onClickEvent(buttonClicker(completeID, data["id"], "complete"));
+	complete.onClickEvent(completeButton(completeID, data["id"]));
 
 	main.appendChild(week);
 	main.appendChild(tomorrow);
