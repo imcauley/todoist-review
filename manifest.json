@@ -1,7 +1,7 @@
 {
 	"id": "todoist-review",
 	"name": "Todoist Review",
-	"version": "0.2.0",
+	"version": "1.0.0",
 	"minAppVersion": "0.15.0",
 	"description": "A pane for reviewing overdue tasks from todoist",
 	"author": "Isaac McAuley",
