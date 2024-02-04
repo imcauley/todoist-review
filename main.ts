@@ -113,13 +113,21 @@ const convertTaskToHTML = (data: any): any => {
 
 	const today = document.createElement("button");
 	today.textContent = "Today";
+	today.style.marginRight = "1.5em";
 	const todayID = data["id"] + "-today-button";
 	today.id = todayID;
 	today.onClickEvent(buttonClicker(todayID, data["id"], "today"));
 
+	const complete = document.createElement("button");
+	complete.textContent = "Complete";
+	const completeID = data["id"] + "-complete-button";
+	complete.id = completeID;
+	complete.onClickEvent(buttonClicker(completeID, data["id"], "complete"));
+
 	main.appendChild(week);
 	main.appendChild(tomorrow);
 	main.appendChild(today);
+	main.appendChild(complete);
 	return main;
 };
 
