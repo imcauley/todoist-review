@@ -8,12 +8,12 @@ import {
 
 // Remember to rename these classes and interfaces!
 
-interface MyPluginSettings {
-	mySetting: string;
+interface TodoistReviewSettings {
+	todoistApiKey: string;
 }
 
-const DEFAULT_SETTINGS: MyPluginSettings = {
-	mySetting: "apiKey",
+const DEFAULT_SETTINGS: TodoistReviewSettings = {
+	todoistApiKey: "apiKey",
 };
 
 let apiKey = "";
@@ -158,12 +158,12 @@ const codeProcessor = async (
 	return;
 };
 
-export default class MyPlugin extends Plugin {
-	settings: MyPluginSettings;
+export default class TodoistReviewPlugin extends Plugin {
+	settings: TodoistReviewSettings;
 
 	async onload() {
 		await this.loadSettings();
-		apiKey = this.settings.mySetting;
+		apiKey = this.settings.todoistApiKey;
 
 		this.registerMarkdownCodeBlockProcessor(
 			"todoist-review",
@@ -171,7 +171,7 @@ export default class MyPlugin extends Plugin {
 		);
 
 		// This adds a settings tab so the user can configure various aspects of the plugin
-		this.addSettingTab(new SampleSettingTab(this.app, this));
+		this.addSettingTab(new TodoistReviewSettingsTab(this.app, this));
 	}
 
 	onunload() {}
@@ -189,10 +189,10 @@ export default class MyPlugin extends Plugin {
 	}
 }
 
-class SampleSettingTab extends PluginSettingTab {
-	plugin: MyPlugin;
+class TodoistReviewSettingsTab extends PluginSettingTab {
+	plugin: TodoistReviewPlugin;
 
-	constructor(app: App, plugin: MyPlugin) {
+	constructor(app: App, plugin: TodoistReviewPlugin) {
 		super(app, plugin);
 		this.plugin = plugin;
 	}
@@ -208,9 +208,9 @@ class SampleSettingTab extends PluginSettingTab {
 			.addText((text) =>
 				text
 					.setPlaceholder("Enter your secret")
-					.setValue(this.plugin.settings.mySetting)
+					.setValue(this.plugin.settings.todoistApiKey)
 					.onChange(async (value) => {
-						this.plugin.settings.mySetting = value;
+						this.plugin.settings.todoistApiKey = value;
 						await this.plugin.saveSettings();
 					})
 			);
