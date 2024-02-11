@@ -1,8 +1,15 @@
-/*
+.todoist-review-container {
+    margin-bottom: 1em;
+}
 
-This CSS file will be included with your plugin, and
-available in the app when your plugin is enabled.
+.todoist-review-text {
+    margin-bottom: 0.5em;
+}
 
-If your plugin does not need CSS, delete this file.
+.todoist-review-button {
+    margin-right: 1.5em;
+}
 
-*/
+.todoist-review-active-button {
+    background-color: var("--color-accent");
+}

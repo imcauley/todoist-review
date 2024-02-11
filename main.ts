@@ -68,17 +68,12 @@ const completeTask = async (id: string) => {
 const changeButtonColor = (buttonID: string, id: string) => {
 	let button = document.getElementById(buttonID)!;
 
-	const accent = getComputedStyle(button).getPropertyValue("--color-accent");
-	const color = getComputedStyle(button).getPropertyValue(
-		"--interactive-normal"
-	);
-
-	["week", "tomorrow", "today"].forEach((b) => {
+	["week", "tomorrow", "today", "complete"].forEach((b) => {
 		let current = document.getElementById(id + "-" + b + "-button")!;
-		current.style.backgroundColor = color;
+		current.classList.remove("todoist-review-active-button");
 	});
 
-	button.style.backgroundColor = accent;
+	button.classList.add("todoist-review-active-button");
 };
 
 const completeButton = (buttonID: string, id: string) => {
@@ -97,22 +92,22 @@ const buttonClicker = (buttonID: string, id: string, postpone: string) => {
 
 const convertTaskToHTML = (data: any): any => {
 	const main = document.createElement("div");
-	main.style.marginBottom = "1em";
+	main.classList.add("todoist-review-container");
 
 	const text = document.createElement("div");
-	text.style.marginBottom = "0.5em";
+	text.classList.add("todoist-review-text");
 	text.textContent = data["content"];
 	main.appendChild(text);
 
 	const week = document.createElement("button");
-	week.style.marginRight = "1.5em";
+	week.classList.add("todoist-review-button");
 	week.textContent = "Next Week";
 	const weekID = data["id"] + "-week-button";
 	week.id = weekID;
 	week.onClickEvent(buttonClicker(weekID, data["id"], "next week"));
 
 	const tomorrow = document.createElement("button");
-	tomorrow.style.marginRight = "1.5em";
+	tomorrow.classList.add("todoist-review-button");
 	tomorrow.textContent = "Tomorrow";
 	const tomorrowID = data["id"] + "-tomorrow-button";
 	tomorrow.id = tomorrowID;
@@ -120,13 +115,14 @@ const convertTaskToHTML = (data: any): any => {
 
 	const today = document.createElement("button");
 	today.textContent = "Today";
-	today.style.marginRight = "1.5em";
+	today.classList.add("todoist-review-button");
 	const todayID = data["id"] + "-today-button";
 	today.id = todayID;
 	today.onClickEvent(buttonClicker(todayID, data["id"], "today"));
 
 	const complete = document.createElement("button");
 	complete.textContent = "Complete";
+	complete.classList.add("todoist-review-button");
 	const completeID = data["id"] + "-complete-button";
 	complete.id = completeID;
 	complete.onClickEvent(completeButton(completeID, data["id"]));
