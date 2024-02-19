@@ -4,6 +4,9 @@ import {
 	Plugin,
 	PluginSettingTab,
 	Setting,
+	requestUrl,
+	type RequestUrlParam,
+	type RequestUrlResponse,
 } from "obsidian";
 
 // Remember to rename these classes and interfaces!
@@ -23,22 +26,25 @@ const makeToDoistRequest = async (
 	method: string,
 	body?: string
 ) => {
-	const headers: Headers = new Headers();
-	headers.set("Content-Type", "application/json");
-	headers.set("Accept", "application/json");
-	headers.set("Authorization", "Bearer " + apiKey);
-
-	const request: RequestInfo = new Request(url, {
+	const requestParams: RequestUrlParam = {
+		url: url,
 		method: method,
-		headers: headers,
 		body: body,
-	});
+		headers: {
+			Authorization: `Bearer ${apiKey}`,
+			"Content-Type": "application/json",
+		},
+	};
 
-	return fetch(request)
-		.then((res) => res.json())
-		.then((res) => {
-			return res;
-		});
+	if (method === "GET") {
+		return requestUrl(requestParams)
+			.then((res) => res.json)
+			.then((res) => {
+				return res;
+			});
+	} else {
+		requestUrl(requestParams);
+	}
 };
 
 const createRequest = async () => {
@@ -50,7 +56,7 @@ const createRequest = async () => {
 
 const updateTask = async (id: string, postpone: string) => {
 	return makeToDoistRequest(
-		"https://api.todoist.com/rest/v2/tasks/" + id + "/close",
+		"https://api.todoist.com/rest/v2/tasks/" + id,
 		"POST",
 		JSON.stringify({
 			due_string: postpone,
@@ -140,6 +146,15 @@ const codeProcessor = async (
 	ctx: MarkdownPostProcessorContext
 ) => {
 	const main = document.createElement("p");
+	el.appendChild(main);
+
+	if (apiKey === "" || apiKey === "apiKey") {
+		const text = document.createElement("div");
+		text.textContent = "Please enter a valid API Key in the settings";
+		main.appendChild(text);
+		return;
+	}
+
 	const data: [any] = await createRequest();
 
 	if (data.length < 1) {
@@ -150,7 +165,6 @@ const codeProcessor = async (
 		data.map((d: any): any => main.appendChild(convertTaskToHTML(d)));
 	}
 
-	el.appendChild(main);
 	return;
 };
 

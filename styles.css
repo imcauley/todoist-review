@@ -11,5 +11,5 @@
 }
 
 .todoist-review-active-button {
-    background-color: var("--color-accent");
+    background-color: var(--interactive-accent) !important;
 }
