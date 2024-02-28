@@ -6,16 +6,13 @@ import {
 	Setting,
 	requestUrl,
 	type RequestUrlParam,
-	type RequestUrlResponse,
 } from "obsidian";
-
-// Remember to rename these classes and interfaces!
 
 interface TodoistReviewSettings {
 	todoistApiKey: string;
 }
 
-const DEFAULT_SETTINGS: TodoistReviewSettings = {
+const TODOIST_REVIEW_SETTINGS: TodoistReviewSettings = {
 	todoistApiKey: "apiKey",
 };
 
@@ -180,7 +177,6 @@ export default class TodoistReviewPlugin extends Plugin {
 			codeProcessor
 		);
 
-		// This adds a settings tab so the user can configure various aspects of the plugin
 		this.addSettingTab(new TodoistReviewSettingsTab(this.app, this));
 	}
 
@@ -189,7 +185,7 @@ export default class TodoistReviewPlugin extends Plugin {
 	async loadSettings() {
 		this.settings = Object.assign(
 			{},
-			DEFAULT_SETTINGS,
+			TODOIST_REVIEW_SETTINGS,
 			await this.loadData()
 		);
 	}
